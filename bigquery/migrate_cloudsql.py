@@ -25,7 +25,7 @@ import sys
 from datetime import datetime, timezone
 
 SOURCE_TABLE = "public.meters"
-TARGET_TABLE = "gridflow.dim_meter_raw"
+TARGET_TABLE = "smartmeter.dim_meter_raw"
 
 # Explicit rather than SELECT *: a column added to the operational table should
 # not silently appear in the warehouse without someone deciding it belongs.
@@ -126,8 +126,8 @@ def verify(execute: bool) -> None:
 
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--instance", default=os.getenv("CLOUDSQL_INSTANCE", "gridflow-ops"))
-    ap.add_argument("--bucket", default=os.getenv("GCS_BUCKET", "gridflow-lake"))
+    ap.add_argument("--instance", default=os.getenv("CLOUDSQL_INSTANCE", "smart-meter-ops"))
+    ap.add_argument("--bucket", default=os.getenv("GCS_BUCKET", "smart-meter-lake"))
     ap.add_argument("--prefix", default="migration/meters")
     group = ap.add_mutually_exclusive_group(required=True)
     group.add_argument("--dry-run", action="store_true")

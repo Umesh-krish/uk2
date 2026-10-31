@@ -16,7 +16,7 @@ Dataflow:
         --runner DataflowRunner --project $GCP_PROJECT --region asia-south1 \
         --temp_location gs://$BUCKET/tmp \
         --input gs://$BUCKET/landing/demand/dt=2026-05-01/demand.csv \
-        --bq-table $GCP_PROJECT:gridflow.fct_grid_demand
+        --bq-table $GCP_PROJECT:smartmeter.fct_grid_demand
 """
 from __future__ import annotations
 

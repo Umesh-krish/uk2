@@ -20,7 +20,7 @@ from pathlib import Path
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--readings", default="data/landing/readings/dt=2026-05-01/readings.csv")
-    ap.add_argument("--project", default=os.getenv("PUBSUB_PROJECT_ID", "gridflow-local"))
+    ap.add_argument("--project", default=os.getenv("PUBSUB_PROJECT_ID", "smart-meter-local"))
     ap.add_argument("--topic", default=os.getenv("PUBSUB_TOPIC", "meter-readings"))
     ap.add_argument("--limit", type=int, default=20000)
     ap.add_argument("--rate", type=int, default=2000, help="Messages per second")

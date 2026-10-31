@@ -7,7 +7,7 @@ from pathlib import Path
 
 import duckdb
 
-DB = Path(os.getenv("GRIDFLOW_DATA", "data")) / "warehouse" / "gridflow.duckdb"
+DB = Path(os.getenv("METER_DATA", "data")) / "warehouse" / "smart_meter.duckdb"
 
 
 def main() -> None:

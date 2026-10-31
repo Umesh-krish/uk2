@@ -10,10 +10,10 @@
 -- scan fail rather than quietly bill for it. In a sandbox that is a guardrail;
 -- on a real project it is a cost control.
 
-CREATE SCHEMA IF NOT EXISTS `${PROJECT}.gridflow`
+CREATE SCHEMA IF NOT EXISTS `${PROJECT}.smart-meter-pipeline`
   OPTIONS (location = 'asia-south1');
 
-CREATE TABLE IF NOT EXISTS `${PROJECT}.gridflow.fct_grid_demand`
+CREATE TABLE IF NOT EXISTS `${PROJECT}.smartmeter.fct_grid_demand`
 (
   settlement_date       DATE      NOT NULL,
   settlement_period     INT64     NOT NULL,
@@ -38,7 +38,7 @@ OPTIONS (
   description = 'Half-hourly grid demand and generation mix by region. Written by beam/demand_batch_pipeline.py.'
 );
 
-CREATE TABLE IF NOT EXISTS `${PROJECT}.gridflow.fct_meter_consumption`
+CREATE TABLE IF NOT EXISTS `${PROJECT}.smartmeter.fct_meter_consumption`
 (
   meter_id           STRING    NOT NULL,
   window_start_utc   TIMESTAMP NOT NULL,
@@ -59,7 +59,7 @@ OPTIONS (
   description = 'Windowed consumption derived from cumulative meter registers. Written by beam/meter_stream_pipeline.py.'
 );
 
-CREATE TABLE IF NOT EXISTS `${PROJECT}.gridflow.dim_meter`
+CREATE TABLE IF NOT EXISTS `${PROJECT}.smartmeter.dim_meter`
 (
   meter_id           STRING NOT NULL,
   region_code        STRING,

@@ -2,19 +2,19 @@
 # project. bigquery is the same models against the real warehouse: partitioning
 # and clustering are declared per model, so `dbt run --target bigquery` produces
 # tables matching bigquery/ddl/02_native_tables.sql.
-gridflow:
+smart_meter_pipeline:
   target: dev
   outputs:
     dev:
       type: duckdb
-      path: "{{ env_var('GRIDFLOW_DATA', '../data') }}/warehouse/gridflow.duckdb"
+      path: "{{ env_var('METER_DATA', '../data') }}/warehouse/smart_meter.duckdb"
       threads: 4
 
     bigquery:
       type: bigquery
       method: service-account
       project: "{{ env_var('GCP_PROJECT') }}"
-      dataset: gridflow
+      dataset: smart-meter-pipeline
       keyfile: "{{ env_var('GOOGLE_APPLICATION_CREDENTIALS') }}"
       location: asia-south1
       threads: 8

@@ -7,5 +7,5 @@ services:
     image: gcr.io/google.com/cloudsdktool/google-cloud-cli:emulators
     command: >
       gcloud beta emulators pubsub start
-      --project=gridflow-local --host-port=0.0.0.0:8085
+      --project=smart-meter-local --host-port=0.0.0.0:8085
     ports: ["8085:8085"]

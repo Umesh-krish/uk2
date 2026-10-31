@@ -10,12 +10,12 @@ sources:
       - name: grid_demand
         description: Half-hourly demand and generation mix by region.
         meta:
-          external_location: "read_json_auto('{{ env_var('GRIDFLOW_DATA', '../data') }}/warehouse/demand.jsonl')"
+          external_location: "read_json_auto('{{ env_var('METER_DATA', '../data') }}/warehouse/demand.jsonl')"
       - name: meter_consumption
         description: Windowed consumption derived from cumulative registers.
         meta:
-          external_location: "read_json_auto('{{ env_var('GRIDFLOW_DATA', '../data') }}/warehouse/consumption.jsonl')"
+          external_location: "read_json_auto('{{ env_var('METER_DATA', '../data') }}/warehouse/consumption.jsonl')"
       - name: meters
         description: Meter reference data, migrated from CloudSQL.
         meta:
-          external_location: "read_csv_auto('{{ env_var('GRIDFLOW_DATA', '../data') }}/landing/meters/meters.csv', header = true)"
+          external_location: "read_csv_auto('{{ env_var('METER_DATA', '../data') }}/landing/meters/meters.csv', header = true)"

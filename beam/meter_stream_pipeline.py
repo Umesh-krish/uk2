@@ -13,14 +13,14 @@ Meter telemetry is awkward in three specific ways, and each gets handled here:
 
 Local, against the Pub/Sub emulator:
     PUBSUB_EMULATOR_HOST=localhost:8085 python beam/meter_stream_pipeline.py \
-        --subscription projects/gridflow-local/subscriptions/readings-sub \
+        --subscription projects/smart-meter-local/subscriptions/readings-sub \
         --output data/warehouse/consumption
 
 Dataflow:
     python beam/meter_stream_pipeline.py --runner DataflowRunner \
         --project $GCP_PROJECT --region asia-south1 --streaming \
         --subscription projects/$GCP_PROJECT/subscriptions/readings-sub \
-        --bq-table $GCP_PROJECT:gridflow.fct_meter_consumption
+        --bq-table $GCP_PROJECT:smartmeter.fct_meter_consumption
 """
 from __future__ import annotations
 

@@ -6,7 +6,7 @@
 -- non-materialized sources, and the base table cannot be dropped underneath
 -- them. Anything richer belongs in a dbt model that runs on a schedule.
 
-CREATE MATERIALIZED VIEW IF NOT EXISTS `${PROJECT}.gridflow.mv_daily_regional_demand`
+CREATE MATERIALIZED VIEW IF NOT EXISTS `${PROJECT}.smartmeter.mv_daily_regional_demand`
 PARTITION BY settlement_date
 CLUSTER BY region_code
 AS
@@ -18,5 +18,5 @@ SELECT
   MAX(demand_mw)        AS peak_demand_mw,
   AVG(price_inr_per_mwh) AS avg_price_inr_per_mwh,
   COUNT(*)              AS settlement_periods
-FROM `${PROJECT}.gridflow.fct_grid_demand`
+FROM `${PROJECT}.smartmeter.fct_grid_demand`
 GROUP BY settlement_date, region_code;

@@ -1,4 +1,4 @@
-# gridflow
+# smart-meter-pipeline
 
 A GCP-native data platform for electricity grid demand and smart meter telemetry, built with Apache Beam, BigQuery, Pub/Sub, Cloud Composer and dbt.
 
@@ -85,7 +85,7 @@ That generates the source feeds, runs both Beam pipelines, builds the models and
 | `bigquery/migrate_cloudsql.py` | CloudSQL to BigQuery migration for the meter dimension |
 | `dbt/models/` | Staging, two facts, a dimension and a gold regional aggregate |
 | `dbt/tests/` | Three custom reconciliation tests |
-| `composer/dags/gridflow_daily.py` | Cloud Composer DAG: land, Dataflow, dbt, test |
+| `composer/dags/smart_meter_daily.py` | Cloud Composer DAG: land, Dataflow, dbt, test |
 
 ## The hard parts
 
@@ -123,7 +123,7 @@ For the streaming path with the emulator:
 make pubsub                     # Pub/Sub emulator on :8085
 make stream                     # publish readings into it
 PUBSUB_EMULATOR_HOST=localhost:8085 python beam/meter_stream_pipeline.py \
-    --subscription projects/gridflow-local/subscriptions/readings-sub \
+    --subscription projects/smart-meter-local/subscriptions/readings-sub \
     --output data/warehouse/consumption
 ```
 

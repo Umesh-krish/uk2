@@ -1,7 +1,7 @@
-name: gridflow
+name: smart_meter_pipeline
 version: "1.0.0"
 config-version: 2
-profile: gridflow
+profile: smart_meter_pipeline
 
 model-paths: ["models"]
 macro-paths: ["macros"]
@@ -15,7 +15,7 @@ vars:
   min_readings_per_window: 2
 
 models:
-  gridflow:
+  smart-meter-pipeline:
     staging:
       +materialized: view
     marts:

@@ -22,10 +22,10 @@ from airflow.operators.empty import EmptyOperator
 from airflow.providers.google.cloud.operators.bigquery import BigQueryInsertJobOperator
 from airflow.providers.google.cloud.transfers.local_to_gcs import LocalFilesystemToGCSOperator
 
-PROJECT = os.getenv("GCP_PROJECT", "gridflow-dev")
-BUCKET = os.getenv("GCS_BUCKET", "gridflow-lake")
+PROJECT = os.getenv("GCP_PROJECT", "smart-meter-dev")
+BUCKET = os.getenv("GCS_BUCKET", "smart-meter-lake")
 REGION = os.getenv("GCP_REGION", "asia-south1")
-PROJECT_ROOT = "/home/airflow/gcs/dags/gridflow"
+PROJECT_ROOT = "/home/airflow/gcs/dags/smart-meter-pipeline"
 
 DEFAULT_ARGS = {
     "owner": "data-engineering",
@@ -38,14 +38,14 @@ DEFAULT_ARGS = {
 
 
 with DAG(
-    dag_id="gridflow_daily",
+    dag_id="smart_meter_daily",
     description="Land grid demand to GCS, run the Dataflow batch job, rebuild the BigQuery warehouse",
     schedule="30 2 * * *",
     start_date=pendulum.datetime(2026, 5, 1, tz="UTC"),
     catchup=False,
     max_active_runs=1,
     default_args=DEFAULT_ARGS,
-    tags=["gridflow", "bigquery", "dataflow", "dbt"],
+    tags=["smart-meter-pipeline", "bigquery", "dataflow", "dbt"],
 ) as dag:
 
     start = EmptyOperator(task_id="start")
@@ -54,13 +54,13 @@ with DAG(
         task_id="extract_demand",
         bash_command=(
             f"cd {PROJECT_ROOT} && python ingestion/generate_grid_data.py "
-            "--start {{ ds }} --days 1 --out /tmp/gridflow/landing"
+            "--start {{ ds }} --days 1 --out /tmp/smart-meter-pipeline/landing"
         ),
     )
 
     land_demand = LocalFilesystemToGCSOperator(
         task_id="land_demand_to_gcs",
-        src="/tmp/gridflow/landing/demand/dt={{ ds }}/demand.csv",
+        src="/tmp/smart-meter-pipeline/landing/demand/dt={{ ds }}/demand.csv",
         dst="landing/demand/dt={{ ds }}/demand.csv",
         bucket=BUCKET,
     )
@@ -74,9 +74,9 @@ with DAG(
             f"cd {PROJECT_ROOT} && python beam/demand_batch_pipeline.py "
             f"--runner DataflowRunner --project {PROJECT} --region {REGION} "
             f"--temp_location gs://{BUCKET}/tmp --staging_location gs://{BUCKET}/staging "
-            f"--job_name gridflow-demand-{{{{ ds_nodash }}}} "
+            f"--job_name smart-meter-demand-{{{{ ds_nodash }}}} "
             f"--input gs://{BUCKET}/landing/demand/dt={{{{ ds }}}}/demand.csv "
-            f"--bq-table {PROJECT}:gridflow.fct_grid_demand"
+            f"--bq-table {PROJECT}:smartmeter.fct_grid_demand"
         ),
         execution_timeout=pendulum.duration(hours=1),
     )
@@ -91,7 +91,7 @@ with DAG(
                 "query": (
                     "SELECT IF(COUNT(*) > 0, TRUE, "
                     "ERROR('no streamed consumption rows for {{ ds }}')) "
-                    f"FROM `{PROJECT}.gridflow.fct_meter_consumption` "
+                    f"FROM `{PROJECT}.smartmeter.fct_meter_consumption` "
                     "WHERE DATE(window_start_utc) = '{{ ds }}'"
                 ),
                 "useLegacySql": False,

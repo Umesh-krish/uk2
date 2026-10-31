@@ -1,5 +1,5 @@
 .DEFAULT_GOAL := help
-export GRIDFLOW_DATA := $(CURDIR)/data
+export METER_DATA := $(CURDIR)/data
 
 help:  ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | awk 'BEGIN{FS=":.*?## "}{printf "  \033[36m%-16s\033[0m %s\n", $$1, $$2}'
@@ -15,7 +15,7 @@ open('data/landing/readings/readings.jsonl','w').write(''.join(json.dumps(r)+chr
 print(f'readings.jsonl -> {len(rows):,} rows')"
 
 beam:  ## Run both Beam pipelines on the DirectRunner
-	@mkdir -p "$(GRIDFLOW_DATA)/warehouse"
+	@mkdir -p "$(METER_DATA)/warehouse"
 	python beam/demand_batch_pipeline.py \
 		--input data/landing/demand/dt=2026-05-01/demand.csv \
 		--output data/warehouse/demand.jsonl
@@ -24,7 +24,7 @@ beam:  ## Run both Beam pipelines on the DirectRunner
 		--output data/warehouse/consumption
 
 warehouse:  ## Run the dbt models
-	@mkdir -p "$(GRIDFLOW_DATA)/warehouse"
+	@mkdir -p "$(METER_DATA)/warehouse"
 	cd dbt && dbt run --profiles-dir . --target $${DBT_TARGET:-dev}
 
 test:  ## Run the dbt test suite

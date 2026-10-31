@@ -1,0 +1,11 @@
+# Only the Pub/Sub emulator. Everything else in this project either runs in
+# process (Beam DirectRunner, DuckDB) or is a managed GCP service with no local
+# equivalent worth faking.
+
+services:
+  pubsub:
+    image: gcr.io/google.com/cloudsdktool/google-cloud-cli:emulators
+    command: >
+      gcloud beta emulators pubsub start
+      --project=gridflow-local --host-port=0.0.0.0:8085
+    ports: ["8085:8085"]

@@ -1,0 +1,15 @@
+# Core: enough for `make demo` with no GCP project.
+apache-beam>=2.60.0
+duckdb>=1.1.0
+dbt-core>=1.8.0
+dbt-duckdb>=1.8.0
+
+# GCP clients, needed only for the Dataflow, BigQuery and CloudSQL paths.
+# apache-beam[gcp]>=2.60.0
+# google-cloud-bigquery>=3.25.0
+# google-cloud-pubsub>=2.23.0
+# google-api-python-client>=2.140.0
+
+# Composer provides Airflow and the Google provider package.
+# apache-airflow==2.9.3
+# apache-airflow-providers-google>=10.20.0

@@ -1,0 +1,21 @@
+version: 2
+
+sources:
+  - name: raw
+    description: >
+      Output of the Beam pipelines. On BigQuery these are the native
+      partitioned tables; on DuckDB they resolve to the JSONL and CSV the
+      DirectRunner wrote, so the models are identical in both.
+    tables:
+      - name: grid_demand
+        description: Half-hourly demand and generation mix by region.
+        meta:
+          external_location: "read_json_auto('{{ env_var('GRIDFLOW_DATA', '../data') }}/warehouse/demand.jsonl')"
+      - name: meter_consumption
+        description: Windowed consumption derived from cumulative registers.
+        meta:
+          external_location: "read_json_auto('{{ env_var('GRIDFLOW_DATA', '../data') }}/warehouse/consumption.jsonl')"
+      - name: meters
+        description: Meter reference data, migrated from CloudSQL.
+        meta:
+          external_location: "read_csv_auto('{{ env_var('GRIDFLOW_DATA', '../data') }}/landing/meters/meters.csv', header = true)"

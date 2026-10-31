@@ -1,0 +1,22 @@
+name: gridflow
+version: "1.0.0"
+config-version: 2
+profile: gridflow
+
+model-paths: ["models"]
+macro-paths: ["macros"]
+test-paths: ["tests"]
+target-path: "target"
+clean-targets: ["target", "dbt_packages"]
+
+vars:
+  # Windows with fewer than this many readings are treated as too sparse to
+  # bill from, and are flagged rather than silently averaged.
+  min_readings_per_window: 2
+
+models:
+  gridflow:
+    staging:
+      +materialized: view
+    marts:
+      +materialized: table

@@ -1,0 +1,22 @@
+# dev runs on DuckDB so the models can be developed and tested with no GCP
+# project. bigquery is the same models against the real warehouse: partitioning
+# and clustering are declared per model, so `dbt run --target bigquery` produces
+# tables matching bigquery/ddl/02_native_tables.sql.
+gridflow:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: "{{ env_var('GRIDFLOW_DATA', '../data') }}/warehouse/gridflow.duckdb"
+      threads: 4
+
+    bigquery:
+      type: bigquery
+      method: service-account
+      project: "{{ env_var('GCP_PROJECT') }}"
+      dataset: gridflow
+      keyfile: "{{ env_var('GOOGLE_APPLICATION_CREDENTIALS') }}"
+      location: asia-south1
+      threads: 8
+      priority: interactive
+      job_retries: 2

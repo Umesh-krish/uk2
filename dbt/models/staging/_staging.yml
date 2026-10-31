@@ -1,0 +1,30 @@
+version: 2
+
+models:
+  - name: stg_grid_demand
+    description: Typed demand rows, one per region per settlement period.
+    columns:
+      - name: region_code
+        tests:
+          - not_null
+          - accepted_values: {values: [TN, KA, MH, GJ, DL]}
+      - name: settlement_period
+        tests: [not_null]
+      - name: demand_mw
+        tests: [not_null]
+
+  - name: stg_meter_consumption
+    description: Typed consumption windows, one per meter per window.
+    columns:
+      - name: meter_id
+        tests: [not_null]
+      - name: window_start_utc
+        tests: [not_null]
+
+  - name: stg_meters
+    columns:
+      - name: meter_id
+        tests: [unique, not_null]
+      - name: tariff_class
+        tests:
+          - accepted_values: {values: [domestic, commercial, industrial]}

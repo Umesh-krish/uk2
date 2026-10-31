@@ -1,0 +1,40 @@
+version: 2
+
+models:
+  - name: dim_meter
+    description: Meter dimension with a derived load band.
+    columns:
+      - name: meter_id
+        tests: [unique, not_null]
+      - name: load_band
+        tests:
+          - accepted_values: {values: [small, medium, large]}
+
+  - name: fct_grid_demand
+    description: Demand fact. Grain is region x settlement period.
+    columns:
+      - name: region_code
+        tests: [not_null]
+      - name: period_band
+        tests:
+          - accepted_values: {values: [morning_peak, evening_peak, overnight, daytime]}
+      - name: demand_mw
+        tests: [not_null]
+
+  - name: fct_meter_consumption
+    description: Consumption fact. Grain is meter x window.
+    columns:
+      - name: meter_id
+        tests:
+          - not_null
+          - relationships: {to: ref('dim_meter'), field: meter_id}
+      - name: region_code
+        tests: [not_null]
+
+  - name: agg_regional_daily
+    description: Gold aggregate, one row per region per day.
+    columns:
+      - name: settlement_date
+        tests: [not_null]
+      - name: settlement_periods
+        tests: [not_null]
